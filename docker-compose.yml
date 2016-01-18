@@ -1,0 +1,8 @@
+wg:
+  container_name: words
+  image: word-generator:latest
+  ports:
+    - 0.0.0.0:5000:5000
+  working_dir: /src
+  volumes:
+    - ${PWD}:/src
