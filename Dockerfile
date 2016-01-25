@@ -1,14 +1,18 @@
 FROM ubuntu:trusty
 MAINTAINER David Nunez <arizonatribe@gmail.com>
 
+ENV TERM xterm
 # Default locations for Node Version Manager and version of Node to be installed
 ENV NODE_VERSION 0.10.18
 ENV NVM_DIR /.nvm
 
-EXPOSE 5000
+EXPOSE 5000 8080
 
 VOLUME ['/src']
-ADD . /src
+# Web application files (server and client)
+ADD app /src/app
+# Only file outside the app/ and docker/ directories needing to be copied over
+COPY package.json /src
 WORKDIR /src
 
 RUN apt-get update
@@ -22,6 +26,7 @@ RUN apt-get install -y \
     vim \
     wget \
     make \
+    nginx \
     dialog \
     net-tools \
     build-essential
@@ -48,4 +53,7 @@ RUN npm install -g uglify-js@2.6.1 less@2.5.3 jade-cli@0.1.1 lodash-cli@3.10.1
 # Execute the chain of build steps outlined in the scripts block of package.json
 RUN npm run build
 
-CMD ["python", "app/server/app.py"]
+# Configuration settings for dependencies used by the running container
+ADD docker /
+
+CMD python app/server/app.py && service nginx start

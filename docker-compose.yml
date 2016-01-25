@@ -3,6 +3,7 @@ wg:
   image: word-generator:latest
   ports:
     - 0.0.0.0:5000:5000
+    - 0.0.0.0:8080:8080
   working_dir: /src
   volumes:
     - ${PWD}:/src
