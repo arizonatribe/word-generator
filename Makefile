@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 NAME = word-generator
-VERSION = 1.0.1
+VERSION = 1.0.2
 
 docker:
 	@docker build --rm=true -t $(NAME):$(VERSION) ./

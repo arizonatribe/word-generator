@@ -40,6 +40,19 @@ docker-compose up --build -d
 
 __NOTE__: The `-d` flag at the end launches the container in the background, so you don't surrender you shell over to the container's stdout. If you'd rather see that output, just omit the `-d` flag.
 
+### Volumes
+
+The JSON file that contains the words used to generate output is inside a local directory `./data` that is mounted to the container's `/data` volume. That file is an example, however you can add more words to it, or even add more files into that volume (Note that the python scripts look for that example file, and you would need to change that script if you add new files that you want to use instead).
+
+Also, if you plan to jump into the container a lot (you use the command `docker exec -it word-generator /bin/bash` to get a shell inside the container), you might want to mount your `~/.bashrc` or `~/.profile` or `~/.vimrc` files so that interacting with the container is more familiar. To do so, you can modify the `volumes:` section of the `docker-compose.yml` to mount additional files and/or folders:
+
+```yml
+    volumes:
+      - ~/.bashrc:/root/.bashrc
+      - ~/.vimrc:/root/.vimrc
+      - ~/.vim:/root/.vim
+```
+
 ## Using the Application
 
 You can explore the API endpoints at [http://localhost:5000/](http://locahost:5000/)

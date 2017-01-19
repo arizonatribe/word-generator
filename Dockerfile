@@ -7,6 +7,7 @@ EXPOSE 5000
 
 WORKDIR ${APP_WORKING_DIR}
 CMD ["/usr/bin/start"]
+VOLUME ["/data"]
 
 # Python dependencies not already in the base image
 RUN pip install flask
