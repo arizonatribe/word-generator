@@ -1,28 +1,55 @@
-# word-generator
+# Word-Generator
 
 Randomly generators a noun, verb, adjective and adverb into a sentence that you can used to help name complicated software releases.
 
+## Depedencies
+
+Docker and Docker-Compose are required to run this application, which are packaged together for Mac and Windows users into [Docker Toolbox](https://www.docker.com/products/docker-toolbox). _Note_: Docker is now available natively for Mac, so you can [install Docker natively](https://docs.docker.com/docker-for-mac/). For Linux users, follow the instructions for installing the [Docker Engine](https://docs.docker.com/engine/installation/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
 ## Instructions
 
- * Install Docker 1.9+ [installation](https://docs.docker.com/engine/installation/) 
- * From the project root, issue the following command: 
+From the project root, issue the following command: 
 
 ```bash
 make docker 
 ```
 
- * After this is completed, the image will have been built and you can launch a container:
+This command runs the `docker` target defined in this project's `Makefile`, however all that is doing is issuing the `docker build . . .` command which is a more lengthy command to type from your command-line (defining a `make` target like that is often done _just_ to shorcut lengthy commands like that).
+
+After this is completed, the image will have been built and you can launch a container:
+
+```bash
+docker run --name=word-generator -p 5000:5000 word-generator
+```
+
+That builds a container named "word-generator" from the image you just created, exposing port 5000 at which to make HTTP GET requests.
+
+Also, you can shortcut _that_ command even further by defining a `docker-compose.yml` file. This project contains such a file with the same configuration parameters in config file format. So that same command can now be executed with the following command:
 
 ```bash
 docker-compose up
 ```
- * Now, you can explore the API endpoints at [http://localhost:5000/](http://locahost:5000/)
-    *  [/words/v1/full](http://locahost:5000/words/v1/full) - _GET_ - Randomly generates a noun, verb, adjective and adverb into a single sentences
-    *  [/words/v1/short](http://locahost:5000/words/v1/short) - _GET_ - Randomly generates a noun and adjective (no query string params accepted)
-    *  [/words/v1/list](http://locahost:5000/words/v1/list) - _GET_ - Retrieves a list of the default words being used by the application (of each word type, too)
-    *  [/words/v1/full?startsWith=w](http://locahost:5000/words/v1/full?startsWith=w) - _GET_ - Randomly generates a noun, verb, adjective and adverb all starting with the provided character(s)
-    *  [/words/v1/full?noun=true&verb=true&adverb=true](http://locahost:5000/words/v1/full?noun=true&verb=true&adverb=true) - _GET_ - Randomly generates a noun, verb and adverb only (specify each word type you wish to include)
-    *  [/words/v1/full](http://localhost:5000/words/v1/full) - _POST_ - Randomly generates a noun, verb, adjective and adverb, using any list words in the JSON you posted in place of the defaults. The JSON object should contain arrays labeled `nouns`, `verbs`, `adverbs`, and/or `adjectives` to be recognized and used to override the defaults lists.
+
+You can even shortcut that process, using the `docker-compose` to build the image _and_ to build the container. Because the `docker-compose.yml` file defines a `build:` property - pointing to the location of this application's `Dockerfile` - you can execute the command `docker-compose build` from this directory and it will run the `docker build ...` command to rebuild the image (which is something you want to do every time you make changes to your source files or add new dependencies to the project).
+
+And now to make _everything_ you just read absurdly simple, you can combine the image building and container building & launching process into one command:
+
+```bash
+docker-compose up --build -d
+```
+
+__NOTE__: The `-d` flag at the end launches the container in the background, so you don't surrender you shell over to the container's stdout. If you'd rather see that output, just omit the `-d` flag.
+
+## Using the Application
+
+You can explore the API endpoints at [http://localhost:5000/](http://locahost:5000/)
+
+*  [/words/v1/full](http://locahost:5000/words/v1/full) - _GET_ - Randomly generates a noun, verb, adjective and adverb into a single sentences
+*  [/words/v1/short](http://locahost:5000/words/v1/short) - _GET_ - Randomly generates a noun and adjective (no query string params accepted)
+*  [/words/v1/list](http://locahost:5000/words/v1/list) - _GET_ - Retrieves a list of the default words being used by the application (of each word type, too)
+*  [/words/v1/full?startsWith=w](http://locahost:5000/words/v1/full?startsWith=w) - _GET_ - Randomly generates a noun, verb, adjective and adverb all starting with the provided character(s)
+*  [/words/v1/full?noun=true&verb=true&adverb=true](http://locahost:5000/words/v1/full?noun=true&verb=true&adverb=true) - _GET_ - Randomly generates a noun, verb and adverb only (specify each word type you wish to include)
+*  [/words/v1/full](http://localhost:5000/words/v1/full) - _POST_ - Randomly generates a noun, verb, adjective and adverb, using any list words in the JSON you posted in place of the defaults. The JSON object should contain arrays labeled `nouns`, `verbs`, `adverbs`, and/or `adjectives` to be recognized and used to override the defaults lists.
 
 ### CLI
 

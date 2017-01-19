@@ -14,7 +14,7 @@ words = {}
 Import a local json filed named 'words.json' where lists of noun,
 verb, adverb and adjective string values are expected
 """
-with open('app/server/words.json') as json_file:
+with open('/data/words.json') as json_file:
     words = json.load(json_file)
     
 def _has(obj, name):
