@@ -19,10 +19,10 @@ This command runs the `docker` target defined in this project's `Makefile`, howe
 After this is completed, the image will have been built and you can launch a container:
 
 ```bash
-docker run --name=word-generator -p 5000:5000 word-generator
+docker run --name=word-generator -v $PWD/data:/data -p 5000:5000 word-generator
 ```
 
-That builds a container named "word-generator" from the image you just created, exposing port 5000 at which to make HTTP GET requests.
+That builds a container named "word-generator" from the image you just created, exposing port 5000 at which to make HTTP GET requests. It also (by default) maps this project's local `data/` directory to the reserved `/data` volume inside the container. The project's local `data/words.json` is a seed file to get you started, but if you want to just follow its formatting to create your own you can mount a directory containing your own custom file instead.
 
 Also, you can shortcut _that_ command even further by defining a `docker-compose.yml` file. This project contains such a file with the same configuration parameters in config file format. So that same command can now be executed with the following command:
 
